@@ -1,17 +1,40 @@
-int ledPin = 9; // El pin al que está conectado el LED
-int minValue = 50; // Valor mínimo de la intensidad de la llama
-int maxValue = 255; // Valor máximo de la intensidad de la llama
-int flickerSpeed = 100; // Velocidad de parpadeo de la llama en milisegundos
+// Velocidad de la estrella
+const int velocidad = 100;
+// Longitud de la cola
+const int cola = 3;
+
+// Variables locales
+int i = 0;
 
 void setup() {
-  pinMode(ledPin, OUTPUT);
-  randomSeed(analogRead(0)); // Inicializa la generación de números aleatorios
+  // Inicializa los pines digitales como salidas
+  for (int i = 0; i < 7; i++) {
+    pinMode(i, OUTPUT);
+  }
 }
 
 void loop() {
-  int randomValue = random(minValue, maxValue); // Genera un valor aleatorio entre minValue y maxValue
-  analogWrite(ledPin, randomValue); // Establece la intensidad de la llama
+  // Enciende los LED-s de la cola
+  for (int i = 0; i < cola; i++) {
+    digitalWrite(i, HIGH);
+  }
 
-  // Agrega un efecto de flicker al cambiar aleatoriamente la intensidad de la llama
-  delay(random(flickerSpeed / 2, flickerSpeed));
+  // Enciende el siguiente LED
+  digitalWrite(i, HIGH);
+
+  // Apaga el LED más a la derecha
+  digitalWrite(i - 1, LOW);
+
+  // Avanza la posición del LED
+  i++;
+
+  // Si el LED más a la derecha está encendido, apaga la estrella
+  if (i == 7) {
+    for (int i = 0; i < 7; i++) {
+      digitalWrite(i, LOW);
+    }
+  }
+
+  // Retrasa la ejecución
+  delay(velocidad);
 }

@@ -1,30 +1,17 @@
-const int potPin = A1; // Pin del potenciómetro
-const int rojoLedPin = 6; // Pin del LED rojo
-const int amarilloLedPin = 7; // Pin del LED amarillo
-const int verdeLedPin = 8; // Pin del LED verde
+int ledPin = 9; // El pin al que está conectado el LED
+int minValue = 50; // Valor mínimo de la intensidad de la llama
+int maxValue = 255; // Valor máximo de la intensidad de la llama
+int flickerSpeed = 100; // Velocidad de parpadeo de la llama en milisegundos
 
 void setup() {
-  pinMode(rojoLedPin, OUTPUT);
-  pinMode(amarilloLedPin, OUTPUT);
-  pinMode(verdeLedPin, OUTPUT);
+  pinMode(ledPin, OUTPUT);
+  randomSeed(analogRead(0)); // Inicializa la generación de números aleatorios
 }
 
 void loop() {
-  int sensorValue = analogRead(potPin);
-  int threshold1 = 300; // Establece el umbral para el LED rojo
-  int threshold2 = 700; // Establece el umbral para el LED amarillo
+  int randomValue = random(minValue, maxValue); // Genera un valor aleatorio entre minValue y maxValue
+  analogWrite(ledPin, randomValue); // Establece la intensidad de la llama
 
-  if (sensorValue < threshold1) {
-    digitalWrite(rojoLedPin, HIGH);
-    digitalWrite(amarilloLedPin, LOW);
-    digitalWrite(verdeLedPin, LOW);
-  } else if (sensorValue < threshold2) {
-    digitalWrite(rojoLedPin, LOW);
-    digitalWrite(amarilloLedPin, HIGH);
-    digitalWrite(verdeLedPin, LOW);
-  } else {
-    digitalWrite(rojoLedPin, LOW);
-    digitalWrite(amarilloLedPin, LOW);
-    digitalWrite(verdeLedPin, HIGH);
-  }
+  // Agrega un efecto de flicker al cambiar aleatoriamente la intensidad de la llama
+  delay(flickerSpeed);
 }

@@ -1,26 +1,28 @@
-const int PIN_POTENCIOMETRO = A0; // Pin analógico para el potenciómetro
-const int PIN_LED = 9; // Pin digital para el LED
+// Definición de pines
+const int PIN_ZUMBADOR = 10;
+
+// Array de frecuencias correspondientes a las notas musicales
+int notas[] = {1915, 1700, 1519, 1432, 1275, 1136, 1014, 956};
+
+// Definición de tiempos
+int tnota = 100; // Tiempo de duración de cada nota
+int pausa = 100; // Tiempo de pausa entre notas
 
 void setup() {
-  pinMode(PIN_LED, OUTPUT); // Configurar el pin del LED como salida
-  Serial.begin(9600); // Iniciar comunicación serial a 9600 baudios
+  pinMode(PIN_ZUMBADOR, OUTPUT); // Establecer el pin del zumbador como salida
 }
 
 void loop() {
-  int valorPotenciometro = analogRead(PIN_POTENCIOMETRO); // Leer el valor del potenciómetro
-  int nivelLuminosidad;
-
-  // Mostrar el valor del potenciómetro en el monitor serial
-  Serial.print("Valor del potenciómetro: ");
-  Serial.println(valorPotenciometro);
-
-  // Determinar el nivel de luminosidad del LED según el valor del potenciómetro
-  if (valorPotenciometro >= 0 && valorPotenciometro <= 512) {
-    nivelLuminosidad = 255; // Nivel de potencia máxima
-  } else if (valorPotenciometro > 512 && valorPotenciometro <= 1024) {
-    nivelLuminosidad = 64; // Nivel de potencia 64
+  for (int n = 0; n < 8; n++) {
+    int frecuencia = notas[n]; // Obtener la frecuencia de la nota actual
+    
+    // Generar la nota musical
+    tone(PIN_ZUMBADOR, frecuencia); // Activar el zumbador con la frecuencia
+    delay(tnota); // Mantener la nota durante el tiempo definido
+    
+    noTone(PIN_ZUMBADOR); // Apagar el zumbador
+    delay(pausa); // Pausa entre notas
   }
 
-  analogWrite(PIN_LED, nivelLuminosidad); // Establecer la luminosidad del LED
-  delay(100); // Pequeña pausa para evitar lecturas muy rápidas y fluctuaciones
+  delay(pausa * 5); // Pausa al final de la secuencia de notas
 }

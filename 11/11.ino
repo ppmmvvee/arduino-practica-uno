@@ -1,28 +1,34 @@
-// Definición de pines
-const int PIN_ZUMBADOR = 10;
-
-// Array de frecuencias correspondientes a las notas musicales
-int notas[] = {1915, 1700, 1519, 1432, 1275, 1136, 1014, 956};
-
-// Definición de tiempos
-int tnota = 100; // Tiempo de duración de cada nota
-int pausa = 100; // Tiempo de pausa entre notas
+int potPin = A1;  // Pin analógico para el potenciómetro
+int ledPin1 = 6; // Pin para el primer LED
+int ledPin2 = 7; // Pin para el segundo LED
+int ledPin3 = 8; // Pin para el tercer LED
 
 void setup() {
-  pinMode(PIN_ZUMBADOR, OUTPUT); // Establecer el pin del zumbador como salida
+  for(int i = 6; i < 8; i++){
+    pinMode(i, OUTPUT);
+  }
 }
 
 void loop() {
-  for (int n = 0; n < 8; n++) {
-    int frecuencia = notas[n]; // Obtener la frecuencia de la nota actual
-    
-    // Generar la nota musical
-    tone(PIN_ZUMBADOR, frecuencia); // Activar el zumbador con la frecuencia
-    delay(tnota); // Mantener la nota durante el tiempo definido
-    
-    noTone(PIN_ZUMBADOR); // Apagar el zumbador
-    delay(pausa); // Pausa entre notas
-  }
+  int sensorValue = analogRead(potPin); // Leer el valor del potenciómetro
+  int ledValue = map(sensorValue, 0, 1023, 0, 3); // Mapear el valor a 0, 1 o 2
 
-  delay(pausa * 5); // Pausa al final de la secuencia de notas
+  // Encender o apagar los LEDs según el valor del potenciómetro
+  if (ledValue >= 1) {
+    digitalWrite(ledPin1, HIGH);
+  } else {
+    digitalWrite(ledPin1, LOW);
+  }
+  
+  if (ledValue >= 2) {
+    digitalWrite(ledPin2, HIGH);
+  } else {
+    digitalWrite(ledPin2, LOW);
+  }
+  
+  if (ledValue >= 3) {
+    digitalWrite(ledPin3, HIGH);
+  } else {
+    digitalWrite(ledPin3, LOW);
+  }
 }
